@@ -21,18 +21,22 @@ constructor(){
     
  }
 
+ updateFavoritStockFolder=(arg:apiItem[])=>{
+   this.stockFavoriteFolder=arg
+ }
+
  toggleFavoriteToFolder=(item:apiItem)=>{
    
-   const differ =this.stockFavoriteFolder.find(arg=>arg.description===item.description)
+   const differ =this.stockFavoriteFolder.find(arg=>arg.symbol===item.symbol)
    if(differ){
-      this.stockFavoriteFolder = this.stockFavoriteFolder.filter(arg=>arg.currency!==item.currency)
+      this.stockFavoriteFolder = this.stockFavoriteFolder.filter(arg=>arg.symbol!==item.symbol)
    }
    else{
       this.stockFavoriteFolder =[...this.stockFavoriteFolder,item]
    }
  }
- removeFavoriteFromFolder=(item:apiItem)=>{
-    this.stockFavoriteFolder= this.stockFavoriteFolder.filter(elem=> elem.displaySymbol!==item.displaySymbol)  
+ removeFavoriteFromFolder=(item:string)=>{
+    this.stockFavoriteFolder= this.stockFavoriteFolder.filter((elem)=> elem.symbol!=item)  
  }
 
 uploadNewsArray=(arr:any)=>{

@@ -13,6 +13,7 @@ import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import SkeletonItem from '../Components/Skeleton/skeleton';
+import Loading from '../Components/Loading/Loading';
 
 const MainPage = () => {
 
@@ -36,54 +37,57 @@ function scrollToTop(): void {
 
 
   const parentRef:any = React.useRef()  
-console.log(data)
 
     return (
         <Container>
    <Headers/>
-   <Main>
-<div
+   
+{isLoading?<Loading/>:<div
 ref={parentRef}
-className=' overflow-auto'>
-   <Typography variant='h4' component='h2' className=' pr-3 ' > News <NewspaperIcon style={{height:'33px',width:'33px'}}/></Typography>
-       <ul>
-        {
-    data?.slice(pages-9,pages).map((item:any)=>{
-        return(
-            <li className='flex flex-col gap-4 p-5 items-center'>
-                <h2  className=' font-mono font-semibold text-xl'>{item.headline}</h2>
-                {item.image?<img src={item.image} className=' w-80  h-44 text-center' alt="" />:<SkeletonItem/>}
-                <p className=' font-mono font-medium text-md'>{item.summary} <NavLink to={item.url}><span className=' font-mono font-semibold'>source</span>...</NavLink></p>
-    
-    
-            </li>
-        )
-    })
-        }
-       </ul>
-       
-       <ButtonGroup
-       className='p-3'
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          <Button
-          disabled={pages===9?true:false}
-          onClick={()=>{
-            setPages(prev=>prev-9)
-            scrollToTop()
-          }}
-          style={{backgroundColor:'darkgrey',borderColor:'white'}}>back</Button>
-          <Button 
-           onClick={()=>{
-            setPages(prev=>prev+9)
-            scrollToTop()
-          }}
-          style={{backgroundColor:'darkgrey',border:'black'}}>next</Button>
-        </ButtonGroup>
+className=' overflow-auto shadow-2xl shadow-slate-900 w-full text-center font-mono  justify-center  p-3  rounded-md bg-lime-100  h-full'>
+<div>     <Typography variant='h4' component='h2' className=' pr-3 ' > News <NewspaperIcon style={{height:'33px',width:'33px'}}/></Typography></div>
+<div>
+         <ul>
+          {
+      data?.slice(pages-9,pages).map((item:any)=>{
+          return(
+              <li className='flex flex-col gap-4 p-5 items-center'>
+                  <h2  className=' font-mono font-semibold text-xl'>{item.headline}</h2>
+                  {item.image?<img src={item.image} className='  w-96  h-54  text-center' alt="" />:<SkeletonItem/>}
+                  <p className=' font-mono font-medium  text-lg'>{item.summary} <NavLink to={item.url}><span className=' font-mono font-semibold'>source</span>...</NavLink></p>
+      
+      
+              </li>
+          )
+      })
+          }
+         </ul>
 </div>
-   </Main>
+       
+<div>
+         <ButtonGroup
+         className='p-3'
+            disableElevation
+            variant="contained"
+            aria-label="Disabled elevation buttons"
+          >
+            <Button
+            disabled={pages===9?true:false}
+            onClick={()=>{
+              setPages(prev=>prev-9)
+              scrollToTop()
+            }}
+            style={{backgroundColor:'darkgrey',borderColor:'white'}}>back</Button>
+            <Button 
+             onClick={()=>{
+              setPages(prev=>prev+9)
+              scrollToTop()
+            }}
+            style={{backgroundColor:'darkgrey',border:'black'}}>next</Button>
+          </ButtonGroup>
+</div>
+</div>}
+  
     </Container>
     );
 };

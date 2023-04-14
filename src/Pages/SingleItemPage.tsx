@@ -4,6 +4,7 @@ import Headers from '../Components/Header/Headers';
 import Main from '../Components/Main/Main';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import { NavLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
@@ -17,23 +18,32 @@ const symbol = name?.slice(1)
    
 
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsarmhr01qkrsgj5rngcgsarmhr01qkrsgj5ro0`)
+       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0`)
        .then(({data})=>setData(data))
        
    },[])
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgsarmhr01qkrsgj5rngcgsarmhr01qkrsgj5ro0`)
+       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0`)
        .then(({data})=>setQuota(data))
        
    },[])
 
-   console.log(data)
-   console.log(quota)
+   const getChart:any=async()=>{
+    let response = await axios.get("https://finnhub.io/api/v1/stock/candle?symbol=AAPL&resolution=1&from=1680369126&to= 1681319526&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0")
+
+    return  response.data
+   }
+
+   const char:any = useQuery('chart',getChart)
+
+console.log(char.data.c.slice(0,30))
+
+
 
     return (
         <Container>
         <Headers/>
-        <div className='bg-lime-100 h-full w-full overflow-auto '>
+        <div className='bg-lime-100 h-full w-full overflow-auto  rounded-md'>
          <Typography  variant="h5" className='pt-6 font-semibold text-center ' component="h2">Information about {data.name} stocks</Typography>
        
 

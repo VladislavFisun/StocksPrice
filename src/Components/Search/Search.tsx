@@ -7,7 +7,7 @@ import BackspaceIcon from '@mui/icons-material/Backspace';
 import { useQuery } from 'react-query';
 import { InputAdornment } from '@mui/material';
 import { getApiData } from '../../Api/stocksApi';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 import { apiItem } from '../../types/types';
 import { observer } from 'mobx-react-lite';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -31,8 +31,8 @@ const Search =observer(() => {
     const {data,isError,isLoading}:any = useQuery("coins",getApiData,{
         keepPreviousData:true
     })
-  
-    const searchRef:any = React.useRef()
+ 
+
 
     useEffect(()=>{
        StockStore.updateStockFolder(api)
@@ -48,9 +48,27 @@ const Search =observer(() => {
     
     },[data,value])
 
-   
+    const toggleFavorit=(arg:apiItem)=>{  
+      const storage:any = localStorage.getItem('favorit')
+      let filtered = StockStore.stockFavoriteFolder?.find((elem:apiItem)=>elem.symbol===arg.symbol)
+      if(filtered){
+      return
+      }
+      if(storage){
+        localStorage.setItem('favorit',JSON.stringify(([...JSON.parse(storage),arg])))
+      }
+      else{
+        localStorage.setItem('favorit',JSON.stringify([arg]))
+      }  
+      
+      StockStore.toggleFavoriteToFolder(arg)
+    }
+
 
    
+
+
+
 if(isError){
   StockStore.toggleError(isError)
   return(<Error/>)
@@ -60,13 +78,17 @@ if(isLoading){
   StockStore.toggleLoading(isLoading)
     return <Loading/>
 }
+
+
     return (
-        <div className='bg-lime-100 h-full w-full'>
+        <div 
+      
+        className='bg-lime-100 h-full w-full rounded-md'>
         <Typography variant='h4' className=' text-center font-mono p-6' >Stocks</Typography>
  <div className=' text-center'>
          <div className='flex items-center justify-center gap-2'>
               <TextField
-              ref={searchRef}
+              
               onFocus={()=>{setFocus(true)}}
                autoComplete='none'
              value={value}
@@ -95,9 +117,12 @@ if(isLoading){
          />
          </div>
  </div>
-{focus&&<div className='flex justify-center '>
-  {api.length!==0? <ul className='mt-7 p-4  rounded-lg bg-gray-100'>
+{focus&&<div 
+
+className='flex justify-center '>
+  {api.length!==0? <ul className='p-4 rounded-xl mt-8 bg-zinc-100 "border-solid  border-4 border-black'>
     <CloseOutlinedIcon 
+    
     onClick={()=>{setFocus(false)}}
     />
     {focus&&StockStore.stockFolder.map((item:apiItem)=>{
@@ -119,7 +144,7 @@ if(isLoading){
         }}>{item.description}</div>
           <div><StarBorderOutlinedIcon
           
-          onClick={()=>{  StockStore.toggleFavoriteToFolder(item)}
+          onClick={()=>{toggleFavorit(item)}
           
           }/></div>
 
