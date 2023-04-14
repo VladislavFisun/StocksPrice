@@ -20,7 +20,7 @@ const MainPage = () => {
     const [pages,setPages] = useState(9)
 
     const getNews=async()=>{
-        const response =await axios.get("https://finnhub.io/api/v1/company-news?symbol=AAPL&from=2022-09-01&to=2023-01-01&token=cgst5spr01qkisfipemgcgst5spr01qkisfipen0")
+        const response =await axios.get("https://finnhub.io/api/v1/company-news?symbol=AAPL&from=2022-09-01&to=2023-01-01&token=cgstmv1r01qkisfipvtgcgstmv1r01qkisfipvu0")
 
         return await response.data
     }

@@ -1,10 +1,12 @@
 import React from 'react';
 import Container from '../Components/Container/Container';
 import Headers from '../Components/Header/Headers';
-import Main from '../Components/Main/Main';
+import {  Chart as ChartJS,CategoryScale,LinearScale,PointElement,LineElement,Title,Tooltip,Legend,} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import chartElementItem from '../Components/ChartElement/chartElement';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { NavLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
@@ -12,6 +14,16 @@ import { CandlesType } from '../types/types';
 import Loading from '../Components/Loading/Loading';
 import Error from '../Components/ErrorComponent/Error';
 const SingleItemPage = () => {
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
 
    const {name} = useParams() 
 const symbol = name?.slice(1)
@@ -24,12 +36,12 @@ const symbol = name?.slice(1)
    
 
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsss9pr01qkisfipa00cgsss9pr01qkisfipa0g`)
+       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgstmv1r01qkisfipvtgcgstmv1r01qkisfipvu0`)
        .then(({data})=>setData(data))
        
    },[])
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgst5spr01qkisfipemgcgst5spr01qkisfipen0`)
+       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgstmv1r01qkisfipvtgcgstmv1r01qkisfipvu0`)
        .then(({data})=>setQuota(data))
        
    },[])
@@ -37,7 +49,7 @@ const symbol = name?.slice(1)
 React.useEffect(()=>{
   setLoading(true)
   setError(false)
-axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=1&from=1675209600&to=1680307199&token=cgst5spr01qkisfipemgcgst5spr01qkisfipen0`)
+axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=1&from=1675209600&to=1680307199&token=cgstmv1r01qkisfipvtgcgstmv1r01qkisfipvu0`)
 .then(({data})=>{
   setChars(data)
   setLoading(false)  
@@ -59,10 +71,10 @@ for(let i=0;i<=arr.length;i+=10){
 return newArr
 }
 
-const cInfo = chars.c? getEvery50(chars.c):[]
-const hInfo = chars.h?getEvery50(chars.h):[]
-const lInfo = chars.l?getEvery50(chars.l).slice(0,50):[]
-const TInfo = chars.t?getEvery50(chars.t).map((item:number)=>{
+ const cInfo:any = chars.c? getEvery50(chars.c):[]
+const hInfo:any = chars.h?getEvery50(chars.h):[]
+const lInfo:any = chars.l?getEvery50(chars.l).slice(0,50):[]
+const TInfo:any = chars.t?getEvery50(chars.t).map((item:number)=>{
   
 const date=(new Date(item*1000))
   return(
@@ -70,10 +82,55 @@ const date=(new Date(item*1000))
   )
 
 })
-  
-  :[]
+  :
+  []
 
-console.log(TInfo)
+  
+console.log(chars)
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+ const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Stock Candles for February',
+    },
+  },
+};
+const labels = TInfo.map((item:number)=>item);
+
+ const info = {
+  labels,
+  datasets: [
+    {
+      label: 'List of close prices for returned candles.',
+      data: cInfo.map((item:number) =>item ),
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'List of high prices for returned candles',
+      data: hInfo.map((item:number) =>item),
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  
+  
+  ],
+};
+
 
 
     return (
@@ -112,10 +169,13 @@ console.log(TInfo)
 
            <div className=' flex justify-center flex-col text-center items-center'>
                <Typography variant='h5' component='h3' className=' text-center'>Stock chart</Typography>
-            {loading?<Loading/>:error?<Error/>: <div className='flex justify-center   w-4/5 bg-slate-400'>
-
-
-              </div>}
+            {loading?<Loading/>:error?<Error/>:
+            <div className='flex justify-center   w-4/5 bg-zink-100'>
+        <Line options={options} data={info} />
+              </div>
+              
+              
+              }
                  
             </div>
         </div>
