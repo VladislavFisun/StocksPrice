@@ -3,7 +3,7 @@ import { MyReturnType } from "../types/types"
 
 
  export const getApiData:any=async()=>{
-    let response = await axios.get("https://finnhub.io/api/v1/stock/symbol?exchange=US&token=cgs27spr01qkrsgj0t1gcgs27spr01qkrsgj0t20")
+    let response = await axios.get("https://finnhub.io/api/v1/stock/symbol?exchange=US&token=cgsarmhr01qkrsgj5rngcgsarmhr01qkrsgj5ro0")
      return await response.data
      }
      export const getApiPrice:any = async(symbol:string)=>{

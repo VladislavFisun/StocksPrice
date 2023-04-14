@@ -9,6 +9,8 @@ class ApiList{
 
 stockFolder:apiItem[]=[]
 
+newsArray:any=[]
+
 stockFavoriteFolder:apiItem[]=[]
 
 constructor(){
@@ -20,17 +22,22 @@ constructor(){
  }
 
  toggleFavoriteToFolder=(item:apiItem)=>{
+   
    const differ =this.stockFavoriteFolder.find(arg=>arg.description===item.description)
    if(differ){
-      return
+      this.stockFavoriteFolder = this.stockFavoriteFolder.filter(arg=>arg.currency!==item.currency)
    }
-   this.stockFavoriteFolder =[...this.stockFavoriteFolder,item]
+   else{
+      this.stockFavoriteFolder =[...this.stockFavoriteFolder,item]
+   }
  }
  removeFavoriteFromFolder=(item:apiItem)=>{
     this.stockFavoriteFolder= this.stockFavoriteFolder.filter(elem=> elem.displaySymbol!==item.displaySymbol)  
  }
 
-
+uploadNewsArray=(arr:any)=>{
+   this.newsArray = [...this.newsArray,...arr]
+}
 
  toggleLoading=(arg:boolean)=>{
    this.Loading=arg

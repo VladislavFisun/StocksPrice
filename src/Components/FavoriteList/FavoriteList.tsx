@@ -29,11 +29,11 @@ const onDeleteFavorite=(item:apiItem)=>{
             <div className='bg-lime-100 h-full w-full text-center'>
               <Typography variant="h4" className='pt-4 font-semibold' component="h2" >Favorite stocks</Typography>
             <div className='flex justify-center items-center flex-col p-8'>
-<ul className='p-4 rounded-xl bg-zinc-100 "border-solid  border-4 border-black'>
+{StockStore.stockFavoriteFolder.length>0?<ul className='p-4 rounded-xl bg-zinc-100 "border-solid  border-4 border-black'>
     {
       StockStore.stockFavoriteFolder.map((item:apiItem)=>{
         return(
-            <li className='flex p-2 items-center justify-between text-left'>
+            <li className='flex p-2 items-center  justify-between  '>
               <ListElement  symbol={item.symbol}/>    
           <div>
               <DeleteIcon
@@ -46,6 +46,9 @@ const onDeleteFavorite=(item:apiItem)=>{
       })
     }
 </ul>
+:
+<Typography variant="h5" className='pt-4 font-semibold animate-pulse' component="h2">favorites not found...</Typography>
+}
 </div>
             </div>
         
@@ -53,3 +56,6 @@ const onDeleteFavorite=(item:apiItem)=>{
 })
 
 export default FavoriteList;
+
+
+
