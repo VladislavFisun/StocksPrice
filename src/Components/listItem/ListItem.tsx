@@ -19,12 +19,12 @@ const [quota,setQuota]=React.useState<any>([])
 
 
 useEffect(()=>{
-    axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsarmhr01qkrsgj5rngcgsarmhr01qkrsgj5ro0`)
+    axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsp49pr01qkisfimss0cgsp49pr01qkisfimssg`)
     .then(({data})=>setData(data))
     
 },[])
 useEffect(()=>{
-    axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgsarmhr01qkrsgj5rngcgsarmhr01qkrsgj5ro0`)
+    axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgsp49pr01qkisfimss0cgsp49pr01qkisfimssg`)
     .then(({data})=>setQuota(data))
     
 },[])

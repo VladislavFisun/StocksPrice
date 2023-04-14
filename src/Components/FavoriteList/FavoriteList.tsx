@@ -26,8 +26,11 @@ const FavoriteList = observer(() => {
   }
 
   useEffect(()=>{
+    
     const storage:any =localStorage.getItem('favorit')
-    StockStore.updateFavoritStockFolder(JSON.parse(storage))
+    if(storage){
+      StockStore.updateFavoritStockFolder(JSON.parse(storage))
+    }
   },[])
 
   
@@ -37,7 +40,7 @@ const FavoriteList = observer(() => {
             <div className='bg-lime-100 rounded-md h-full w-full text-center overflow-auto'>
               <Typography variant="h4" className='pt-4 font-semibold' component="h2" >Favorite stocks</Typography>
             <div className='flex justify-center items-center flex-col p-8'>
-{StockStore.stockFavoriteFolder.length>0?
+{StockStore?.stockFavoriteFolder?.length>0?
 <ul className='p-4 rounded-xl bg-zinc-100 "border-solid  border-4 border-black'>
 {
       StockStore.stockFavoriteFolder.map((item:apiItem)=>{

@@ -8,6 +8,9 @@ import { useQuery } from 'react-query';
 import { NavLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
+import { CandlesType } from '../types/types';
+import Loading from '../Components/Loading/Loading';
+import Error from '../Components/ErrorComponent/Error';
 const SingleItemPage = () => {
 
    const {name} = useParams() 
@@ -15,29 +18,62 @@ const symbol = name?.slice(1)
    console.log(symbol)
    const [data,setData] = React.useState<any>([])
    const [quota,setQuota]=React.useState<any>([])
+   const [chars,setChars]=React.useState<any>([])
+   const[error,setError] = React.useState<boolean>(false)
+   const[loading,setLoading] = React.useState<boolean>(false)
    
 
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0`)
+       axios.get(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=cgsss9pr01qkisfipa00cgsss9pr01qkisfipa0g`)
        .then(({data})=>setData(data))
        
    },[])
    React.useEffect(()=>{
-       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0`)
+       axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cgst5spr01qkisfipemgcgst5spr01qkisfipen0`)
        .then(({data})=>setQuota(data))
        
    },[])
 
-   const getChart:any=async()=>{
-    let response = await axios.get("https://finnhub.io/api/v1/stock/candle?symbol=AAPL&resolution=1&from=1680369126&to= 1681319526&token=cgsoeq1r01qkisfimdrgcgsoeq1r01qkisfimds0")
+React.useEffect(()=>{
+  setLoading(true)
+  setError(false)
+axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=1&from=1675209600&to=1680307199&token=cgst5spr01qkisfipemgcgst5spr01qkisfipen0`)
+.then(({data})=>{
+  setChars(data)
+  setLoading(false)  
+  setError(false)
+})
+.catch(err=>{
+  alert(err)
+  setError(true)
+})
+},[])
 
-    return  response.data
-   }
+const getEvery50=(arr:[])=>{
+let newArr:any[] =[]
+for(let i=0;i<=arr.length;i+=10){
+  if(i%35===0){
+   newArr.push(arr[i])
+  }
+}
+return newArr
+}
 
-   const char:any = useQuery('chart',getChart)
+const cInfo = chars.c? getEvery50(chars.c):[]
+const hInfo = chars.h?getEvery50(chars.h):[]
+const lInfo = chars.l?getEvery50(chars.l).slice(0,50):[]
+const TInfo = chars.t?getEvery50(chars.t).map((item:number)=>{
+  
+const date=(new Date(item*1000))
+  return(
+    `${date?.getDate()}.${date?.getMonth()}`
+  )
 
-console.log(char.data.c.slice(0,30))
+})
+  
+  :[]
 
+console.log(TInfo)
 
 
     return (
@@ -74,8 +110,13 @@ console.log(char.data.c.slice(0,30))
             </div>
            </div>
 
-            <div className=' flex justify-center text-center items-center'>
+           <div className=' flex justify-center flex-col text-center items-center'>
                <Typography variant='h5' component='h3' className=' text-center'>Stock chart</Typography>
+            {loading?<Loading/>:error?<Error/>: <div className='flex justify-center   w-4/5 bg-slate-400'>
+
+
+              </div>}
+                 
             </div>
         </div>
 
